@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+	<meta charset="utf-8">
+		<style>
+
+			body {
+				font: 10px sans-serif;
+			}
+
+			.arc path {
+				stroke: #fff;
+			}
+
+		</style>
+	<body>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script>
+			var start_day, end_day, rent_return, station, is_same, display_top;
+			var rent_top, rent_bottom;
+			var query;
+
+			var width = 460,
+				height = 500,
+				radius = Math.min(width, height) / 2;
+
+			var color = d3.scale.ordinal()
+				.range(["#8f0000", "#bb0000", "#e80000", "#ff1500", "#ff4200", 
+					"#ff6e00", "#ff9b00", "#ffc700", "#fff400", "#edff1c",
+					"#c0ff3e", "#94ff60", "#68ff82", "#3bffa4", "#0fffc6",
+					"#00e1fb", "#29e4ff", "#70edff", "#b7f6ff", "#ffffff"]);
+
+			var arc = d3.svg.arc()
+				.outerRadius(radius - 10)
+				.innerRadius(0);
+
+			var pie = d3.layout.pie()
+				.sort(null)
+				.value(function(d) { return d.count; });
+
+			var svg = d3.select("body").append("svg")
+				.attr("width", width)
+				.attr("height", height)
+				.append("g")
+				.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+			parseUrl();
+
+			setQuery();
+
+			d3.csv("spider_gencsv.php?query="+query, function(error, data) {
+
+				data.forEach(function(d) {
+					d.count = +d.count;
+				});
+
+				var g = svg.selectAll(".arc")
+					.data(pie(data))
+					.enter().append("g")
+					.attr("class", "arc");
+
+				g.append("path")
+					.attr("d", arc)
+					.style("fill", function(d) { return color(d.data.return_name); });
+
+				g.append("text")
+					.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+					.attr("dy", ".35em")
+					.style("text-anchor", "middle")
+					.text(function(d) { return d.data.return_name; })
+					.attr("font-size", "14px");
+
+			});
+
+			function parseUrl() {
+				var parameters = location.search.substring(1).split("&");
+
+				if(parameters.length == 5) {
+				
+					var temp = parameters[0].split("=");
+					start_day = unescape(temp[1]);
+
+					temp = parameters[1].split("=");
+					end_day = unescape(temp[1]);
+
+					temp = parameters[2].split("=");
+					station = unescape(temp[1]);
+
+					temp = parameters[3].split("=");
+					display_top = unescape(temp[1]);
+
+					temp = parameters[4].split("=");
+					is_same = unescape(temp[1]);
+				} else {
+					start_day = "2013/01/01 00:00:00";
+					end_day = "2014/01/01 05:59:59";
+					station = 1;
+					display_top = 10;
+					is_same = 1;
+				}
+			}
+
+			function setQuery() {
+				if(is_same == 0) {
+					query = "SELECT d.name AS return_name, c.count AS count FROM " +
+						"(SELECT b.rent_station AS rent_station, a.name AS name, a.latlng AS latlng, b.return_station AS return_station, b.count AS count FROM " +
+						"(SELECT station_number, name, latlng FROM station) AS a " +
+						"RIGHT OUTER JOIN " +
+						"(SELECT rent_station, return_station, COUNT(*) AS count FROM innout WHERE rent_station = " + 
+						station +
+						" AND return_station != 0 AND rent_station != return_station AND rent_date BETWEEN '" + 
+						start_day +
+						"' AND '" + 
+						end_day +
+						"' GROUP BY rent_station, return_station ORDER BY count DESC LIMIT " +
+						display_top +
+						") AS b " +
+						"ON a.station_number = b.rent_station) AS c " +
+						"LEFT OUTER JOIN " +
+						"(SELECT b.rent_station AS rent_station, a.name AS name, a.latlng AS latlng, b.return_station AS return_station, b.count AS count FROM " +
+						"(SELECT station_number, name, latlng FROM station) AS a " +
+						"RIGHT OUTER JOIN " +
+						"(SELECT rent_station, return_station, COUNT(*) AS count FROM innout WHERE rent_station = " + 
+						station +
+						" AND return_station != 0 AND rent_station != return_station AND rent_date BETWEEN '" +
+						start_day + 
+						"' AND '" +
+						end_day +
+						"' GROUP BY rent_station, return_station ORDER BY count DESC LIMIT " +
+						display_top +
+						") AS b " +
+						"ON a.station_number = b.return_station) AS d " +
+						"ON c.rent_station = d.rent_station AND c.return_station = d.return_station ORDER BY count DESC " +
+						"LIMIT " +
+						display_top;
+				} else if (is_same == 1) {
+					query = "SELECT d.name AS return_name, c.count AS count FROM " +
+						"(SELECT b.rent_station AS rent_station, a.name AS name, a.latlng AS latlng, b.return_station AS return_station, b.count AS count FROM " +
+						"(SELECT station_number, name, latlng FROM station) AS a " +
+						"RIGHT OUTER JOIN " +
+						"(SELECT rent_station, return_station, COUNT(*) AS count FROM innout WHERE rent_station = " + 
+						station +
+						" AND return_station != 0 AND rent_date BETWEEN '" + 
+						start_day +
+						"' AND '" + 
+						end_day +
+						"' GROUP BY rent_station, return_station ORDER BY count DESC LIMIT " +
+						display_top +
+						") AS b " +
+						"ON a.station_number = b.rent_station) AS c " +
+						"LEFT OUTER JOIN " +
+						"(SELECT b.rent_station AS rent_station, a.name AS name, a.latlng AS latlng, b.return_station AS return_station, b.count AS count FROM " +
+						"(SELECT station_number, name, latlng FROM station) AS a " +
+						"RIGHT OUTER JOIN " +
+						"(SELECT rent_station, return_station, COUNT(*) AS count FROM innout WHERE rent_station = " + 
+						station +
+						" AND return_station != 0 AND rent_date BETWEEN '" +
+						start_day + 
+						"' AND '" +
+						end_day +
+						"' GROUP BY rent_station, return_station ORDER BY count DESC LIMIT " +
+						display_top +
+						") AS b " +
+						"ON a.station_number = b.return_station) AS d " +
+						"ON c.rent_station = d.rent_station AND c.return_station = d.return_station ORDER BY count DESC " +
+						"LIMIT " +
+						display_top;
+				}
+			}
+</script>

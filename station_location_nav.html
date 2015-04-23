@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta content="initial-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="station_location_nav.css">
+	<script type="text/javascript">
+		// 순위 분포 보기 클릭
+		function make_query(){
+			// 시작 날짜 범위 변수
+			var start_day = document.getElementsByName("start_day")[0].value;
+			var end_day = document.getElementsByName("end_day")[0].value;
+			// 날짜 입력이 안 되어 있을 경우
+			if(start_day == "") {
+				start_day = "2013/01/01 00:00:00";
+			}
+			if(end_day == "") {
+				end_day == "2014/01/01 05:59:59";
+			}
+
+			// 순위 범위 변수
+			var rent_top = document.getElementsByName("rent_top")[0].value;
+			var rent_bottom = document.getElementsByName("rent_bottom")[0].value;
+			// 순위 입력이 안 되어 있을 경우
+			if(rent_top == "") {
+				rent_top = 1;
+			}
+			if(rent_bottom == "") {
+				rent_bottom = 10;
+			}
+
+			// 쿼리 제작 및 표현
+			parent.document.getElementById('iframe_article').src = "station_location.html" +
+				"?start_day=" + start_day +
+				"&end_day=" + end_day +
+				"&rent_top=" + rent_top +
+				"&rent_bottom=" + rent_bottom;
+		}
+	</script>
+	</head>
+	<body>
+		<!-- 1~144위까지 10개씩 프리셋으로 제작
+			121위부터는 MySQL의 버그인지 rent_bottom+1씩 해줘야 정상적인 결과가 나옴
+		-->
+		<p align=center>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=1&rent_bottom=10" target="iframe_article">1~10위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=11&rent_bottom=20" target="iframe_article">11~20위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=21&rent_bottom=30" target="iframe_article">21~30위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=31&rent_bottom=40" target="iframe_article">31~40위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=41&rent_bottom=50" target="iframe_article">41~50위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=51&rent_bottom=60" target="iframe_article">51~60위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=61&rent_bottom=70" target="iframe_article">61~70위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=71&rent_bottom=80" target="iframe_article">71~80위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=81&rent_bottom=90" target="iframe_article">81~90위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=91&rent_bottom=100" target="iframe_article">91~100위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=101&rent_bottom=110" target="iframe_article">101~110위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=111&rent_bottom=120" target="iframe_article">111~120위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=121&rent_bottom=131" target="iframe_article">121~130위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=131&rent_bottom=141" target="iframe_article">131~140위</a><br>
+			<a href="station_location.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&rent_top=141&rent_bottom=145" target="iframe_article">141~144위</a><br>
+		</p>
+		<br><br><br><br><br>
+		<!-- 직접입력하는 부분
+			날짜와 순위 범위를 입력받아 출력
+		-->
+		<h3 align=center>--직접입력--<br></h3>
+		<p style="font-weight: bold; text-align: center;">날짜</p>
+		<div align=center>
+			<input type="datetime" name="start_day" style="width: 125px" placeholder="YYYY/MM/DD HH:II:SS" value="2013/01/01 00:00:00"> 부터
+		</div>
+		<div align=center>
+			<input type="datetime" name="end_day" style="width: 125px" placeholder="YYYY/MM/DD HH:II:SS" value="2014/01/01 05:59:59"> 까지
+		</div>
+		<p style="font-weight: bold; text-align: center;">순위</p>
+		<div align=center>
+			<input type="text" name="rent_top" style="width: 50px" placeholder="M: 144" value="1"> 위 부터
+		</div>
+		<div align=center>
+			<input type="text" name="rent_bottom" style="width: 50px" placeholder="M: 144" value="144"> 위 까지
+		</div>
+		<br>
+		<div align=center>
+			<button id="submit_query" onclick="make_query()"> 순위 분포 보기 </button>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Heat Map</title>
+		<meta name="viewport" conent="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="spider.css">
+		<script type="text/javascript">
+			var start_day, end_day, rent_return, station, is_same, display_top;
+			var rent_top, rent_bottom;
+
+			parseUrl();
+
+			function parseUrl() {
+				var parameters = location.search.substring(1).split("&");
+
+				if(parameters.length == 5) {
+					var temp = parameters[0].split("=");
+					start_day = unescape(temp[1]);
+
+					temp = parameters[1].split("=");
+					end_day = unescape(temp[1]);
+                        
+					temp = parameters[2].split("=");
+					station = unescape(temp[1]);
+
+					temp = parameters[3].split("=");
+					display_top = unescape(temp[1]);
+
+					temp = parameters[4].split("=");
+					is_same = unescape(temp[1]);
+				} else {
+					start_day = "2013/01/01 00:00:00";
+					end_day = "2014/01/01 05:59:59";
+					station = 1;
+					display_top = 10;
+					is_same = 1;
+				}
+			}
+		</script>
+	</head>
+	</body>
+		<div id="nav">
+			<script type="text/javascript">
+				document.getElementById('nav').innerHTML = "<iframe src='spider_location.html" +
+					"?start_day=" + start_day +
+					"&end_day=" + end_day +
+					"&station=" + station +
+					"&display_top=" + display_top +
+					"&is_same=" + is_same +
+					"' width='100%' height='100%' frameborder='0'> </iframe>";
+			</script>
+		</div>
+		<div id="article">
+			<script type="text/javascript">
+				document.getElementById('article').innerHTML = "<iframe src='spider_pie.html" +
+					"?start_day=" + start_day +
+					"&end_day=" + end_day +
+					"&station=" + station +
+					"&display_top=" + display_top +
+					"&is_same=" + is_same +
+					"' width='100%' height='100%' frameborder='0'> </iframe>";
+			</script>
+		</div>
+	</body>
+</html>

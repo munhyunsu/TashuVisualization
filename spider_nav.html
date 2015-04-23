@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta content="initial-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="station_location_nav.css">
+	<script type="text/javascript">
+		// 순위 분포 보기 클릭
+		function make_query(){
+			// 시작 날짜 범위 변수
+			var start_day = document.getElementsByName("start_day")[0].value;
+			var end_day = document.getElementsByName("end_day")[0].value;
+			// 날짜 입력이 안 되어 있을 경우
+			if(start_day == "") {
+				start_day = "2013/01/01 00:00:00";
+			}
+			if(end_day == "") {
+				end_day == "2014/01/01 05:59:59";
+			}
+
+			// 정류장
+			var station = document.getElementsByName("station")[0].value;
+			// 정류장 선택이 안 되어 있을 경우
+			//if(station == 0) {
+			//	alert("정류장을 선택해주세요.");
+			//}
+
+			// 순위 입력 변수
+			var display_top = document.getElementsByName("display_top")[0].value;
+			// 순위 입력이 안 되어 있을 경우
+			if(display_top == "") {
+				display_top = 1;
+			}
+
+			// 여가용 표시 변수(이동 경로만)
+			var is_same = document.getElementsByName("only_route")[0].checked ? 0 : 1;
+
+			// 쿼리 제작 및 표현
+			parent.document.getElementById('iframe_article').src = "spider.html" +
+				"?start_day=" + start_day +
+				"&end_day=" + end_day +
+				"&station=" + station +
+				"&display_top=" + display_top +
+				"&is_same=" + is_same;
+		}
+	</script>
+	</head>
+	<body>
+		<!-- 2013년 통계.
+			각 월별 통계를 프리셋으로 제공.
+		-->
+		<p align=center>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=3&display_top=10&is_same=1" target="iframe_article">한밭수목원</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=56&display_top=10&is_same=1" target="iframe_article">충대정문(장대네거리)</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=17&display_top=10&is_same=1" target="iframe_article">타임월드 앞</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=31&display_top=10&is_same=1" target="iframe_article">유성구청</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=33&display_top=10&is_same=1" target="iframe_article">월평역</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=32&display_top=10&is_same=1" target="iframe_article">홈플러스(유성점)</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=14&display_top=10&is_same=1" target="iframe_article">둔산 하이마트 앞</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=60&display_top=10&is_same=1" target="iframe_article">유성온천역 3번출구</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=55&display_top=10&is_same=1" target="iframe_article">충대정문오거리 1</a><br>
+			<a href="spider.html?start_day=2013/01/01 00:00:00&end_day=2014/01/01 05:59:59&station=8&display_top=10&is_same=1" target="iframe_article">정부청사 입구(샘머리)</a><br>
+		</p>
+		<br><br><br><br><br>
+		<!-- 직접입력하는 부분
+			날짜와 정류장을 입력받아 출력
+		-->
+		<h3 align=center>--직접입력--<br></h3>
+		<p style="font-weight: bold; text-align: center;">날짜</p>
+		<div align=center>
+			<input type="datetime" name="start_day" style="width: 125px" placeholder="YYYY/MM/DD HH:II:SS" value="2013/01/01 00:00:00"> 부터
+		</div>
+		<div align=center>
+			<input type="datetime" name="end_day" style="width: 125px" placeholder="YYYY/MM/DD HH:II:SS" value="2014/01/01 05:59:59"> 까지
+		</div>
+		<p style="font-weight: bold; text-align: center;">정류장</p>
+		<div align=center>
+			<select name="station">
+				<option value="0">Not Selected</option>
+				<option value="1">1. 무역전시관</option>
+				<option value="2">2. 대전컨벤션센터</option>
+				<option value="3">3. 한밭수목원</option>
+				<option value="4">4. 초원아파트</option>
+				<option value="5">5. 둔산대공원</option>
+				<option value="6">6. 백합4가</option>
+				<option value="7">7. 정부청사(대덕대로)</option>
+				<option value="8">8. 정부청사(샘머리)</option>
+				<option value="9">9. 황실아파트</option>
+				<option value="10">10. 만년동 KBS</option>
+				<option value="11">11. 누리아파트</option>
+				<option value="12">12. 정부청사(4번 출구)</option>
+				<option value="13">13. 삼천중학교</option>
+				<option value="14">14. 둔산 하이마트</option>
+				<option value="15">15. 둔산 홈플러스</option>
+				<option value="16">16. 국화아파트</option>
+				<option value="17">17. 타임월드</option>
+				<option value="18">18. 대전시청</option>
+				<option value="19">19. 현대아이텔</option>
+				<option value="20">20. 크로바아파트</option>
+				<option value="21">21. 카이스트 학사식당</option>
+				<option value="22">22. 카이스트 창의학습관</option>
+				<option value="23">23. 카이스트 정문</option>
+				<option value="24">24. 화폐박물관</option>
+				<option value="25">25. 카아스트 후문</option>
+				<option value="26">26. 엑스포 과학공원 주차장</option>
+				<option value="27">27. 엑스포 과학공원</option>
+				<option value="28">28. 스마트시티</option>
+				<option value="29">29. 만년동 주민센터</option>
+				<option value="30">30. 선사유적지</option>
+				<option value="31">31. 유성구청</option>
+				<option value="32">32. 유성 홈플러스</option>
+				<option value="33">33. 월평역</option>
+				<option value="34">34. 진달래아파트</option>
+				<option value="35">35. 갈마역</option>
+				<option value="36">36. 가람아파트</option>
+				<option value="37">37. 수정타운아파트</option>
+				<option value="38">38. 갑천역</option>
+				<option value="39">39. 패션월드</option>
+				<option value="40">40. 월평타운</option>
+				<option value="41">41. 대전일보</option>
+				<option value="42">42. 갈마1동 주민센터</option>
+				<option value="43">43. 둔산여고</option>
+				<option value="44">44. 을지대학병원</option>
+				<option value="45">45. 청솔아파트</option>
+				<option value="46">46. 경성큰마을</option>
+				<option value="47">47. 오페라웨딩홀</option>
+				<option value="48">48. 대전 종합 고용지원 센터</option>
+				<option value="49">49. 한국 농어촌 공사</option>
+				<option value="50">50. 한가람아파트</option>
+				<option value="51">51. 남선공원 종합체육관</option>
+				<option value="52">52. 유승기업사</option>
+				<option value="53">53. 탄방지하차도</option>
+				<option value="54">54. 궁동네거리</option>
+				<option value="55">55. 충대정문오거리</option>
+				<option value="56">56. 충대정문(장대네거리)</option>
+				<option value="57">57. 한진오피스텔</option>
+				<option value="58">58. 구암역</option>
+				<option value="59">59. 유성온천역(6번출구)</option>
+				<option value="60">60. 유성온천역(3번출구)</option>
+				<option value="61">61. 만년교</option>
+				<option value="62">62. 도안 휴먼시아 1단지</option>
+				<option value="63">63. 상대초교</option>
+				<option value="64">64. 목련 1단지</option>
+				<option value="65">65. 센트럴시티</option>
+				<option value="66">66. 도안 휴먼시아 6단지</option>
+				<option value="67">67. 한라비발디</option>
+				<option value="68">68. 신안인스빌리베라</option>
+				<option value="69">69. 트리플시티</option>
+				<option value="70">70. 도안 휴먼시아 10단지</option>
+				<option value="71">71. 대전 지방국세청</option>
+				<option value="72">72. 대전 동부경찰서</option>
+				<option value="73">73. 대전 중앙병원</option>
+				<option value="74">74. 대전 중리시장</option>
+				<option value="75">75. 보람아파트</option>
+				<option value="76">76. 선비마을</option>
+				<option value="77">77. 선비마을 3단지</option>
+				<option value="78">78. 중리동</option>
+				<option value="79">79. 수도시설관리사업소</option>
+				<option value="80">80. 송촌소방서</option>
+				<option value="81">81. 동춘당공원</option>
+				<option value="82">82. 선비마을 5단지</option>
+				<option value="83">83. 유평초등학교</option>
+				<option value="84">84. 강남한의원</option>
+				<option value="85">85. 태평 1동 주민센터</option>
+				<option value="86">86. 삼부프라자</option>
+				<option value="87">87. 쌍용 예가아파트</option>
+				<option value="88">88. 태평초등학교</option>
+				<option value="89">89. 버드내초등학교</option>
+				<option value="90">90. 유등교</option>
+				<option value="91">91. 버드내네거리</option>
+				<option value="92">92. 서대전 농협</option>
+				<option value="93">93. 서대전 육교</option>
+				<option value="94">94. 미리내아파트</option>
+				<option value="95">95. 판암역(1번출구)</option>
+				<option value="96">96. 판암역(4번출구)</option>
+				<option value="97">97. 가오고등학교</option>
+				<option value="98">98. 은어송마을</option>
+				<option value="99">99. 가오 홈플러스(건너편)</option>
+				<option value="100">100. 가오 홈플러스</option>
+				<option value="101">101. 은어송마을 4단지</option>
+				<option value="102">102. 은어송마을 2단지</option>
+				<option value="103">103. 남부 평생교육 문화센터</option>
+				<option value="104">104. 중앙과학관</option>
+				<option value="105">105. 카이스트 서쪽 쪽문</option>
+				<option value="106">106. 카이스트 다솜관</option>
+				<option value="107">107. 카이스트 세종관</option>
+				<option value="108">108. 목원대</option>
+				<option value="109">109. 서부농협본점</option>
+				<option value="110">110. 용문 4가</option>
+				<option value="111">111. 순복음 교회</option>
+				<option value="112">112. 나르메아파트</option>
+				<option value="113">113. 가장교</option>
+				<option value="114">114. 태평동성당</option>
+				<option value="115">115. 한전</option>
+				<option value="116">116. 동대전 홈플러스</option>
+				<option value="117">117. 동부내거리</option>
+				<option value="118">118. 복합터미널</option>
+				<option value="119">119. 용전동 천주교회</option>
+				<option value="120">120. 한국통신 용전지점</option>
+				<option value="121">121. 용전동 주민센터</option>
+				<option value="122">122. 한남대후문</option>
+				<option value="123">123. 대덕경찰서</option>
+				<option value="124">124. 목상동 주민센터</option>
+				<option value="125">125. 엑슬루타워</option>
+				<option value="126">126. 신탄진 주민센터</option>
+				<option value="127">127. 신탄진역</option>
+				<option value="128">128. 과선교 버스정류장</option>
+				<option value="129">129. 신탄진고 4가</option>
+				<option value="130">130. 용정초등학교</option>
+				<option value="131">131. 에코공원</option>
+				<option value="132">132. 삼정 3가</option>
+				<option value="133">133. 오룡역</option>
+				<option value="134">134. 중도일보사</option>
+				<option value="135">135. 서대전역 네거리</option>
+				<option value="136">136. 중구청역</option>
+				<option value="137">137. 센트럴파크 302동</option>
+				<option value="138">138. 센트럴파크 105동</option>
+				<option value="139">139. 서대전지하철역</option>
+				<option value="140">140. 대전시민대학</option>
+				<option value="141">141. 대전 세무서</option>
+				<option value="142">142. 참 좋은 아파트</option>
+				<option value="143">143. 중앙로역</option>
+				<option value="144">144. 타슈 관제센터</option>
+			</select>
+		</div>
+		<p style="font-weight:bold; text-align: center;">순위</p>
+		<div align=center>
+			<input type="text" name="display_top" style="width: 50px" placeholder="M: 144" value="20"> 위 까지
+		</div>
+		<br>
+		<div align=center>
+			<input type="checkbox" name="only_route" checked> 이동 경로만 <br><br>
+		</div>
+		<div align=center>
+			<button id="submit_query" onclick="make_query()"> 목적지 분포 및 비율 보기 </button>
+		</div>
+	</body>
+</html>

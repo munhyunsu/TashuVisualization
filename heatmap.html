@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Heat Map</title>
+		<meta name="viewport" conent="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="heatmap.css">
+		<script type="text/javascript">
+			var start_day, end_day, station;
+
+			parseUrl();
+
+			function parseUrl() {
+				var parameters = location.search.substring(1).split("&");
+
+				if(parameters.length == 3) {
+					var temp = parameters[0].split("=");
+					start_day = unescape(temp[1]);
+
+					temp = parameters[1].split("=");
+					end_day = unescape(temp[1]);
+
+					temp = parameters[2].split("=");
+					station = unescape(temp[1]);
+				} else {
+					start_day = "2013/01/01 00:00:00";
+					end_day = "2014/01/01 05:59:59";
+					station = 0;
+				}
+			}
+		</script>
+	</head>
+	</body>
+		<div id="header">
+			<script type="text/javascript">
+				document.getElementById('header').innerHTML = "<iframe src='heatmap_square.html" +
+					"?start_day=" + start_day +
+					"&end_day=" + end_day +
+					"&station=" + station +
+					"' width='100%' height='100%' frameborder='0'> </iframe>";
+			</script>
+		</div>
+		<div id="nav">
+			<script type="text/javascript">
+				document.getElementById('nav').innerHTML = "<iframe src='bar_day.html" +
+					"?start_day=" + start_day +
+					"&end_day=" + end_day +
+					"&station=" + station +
+					"' width='100%' height='100%' frameborder='0'> </iframe>";
+			</script>
+		</div>
+		<div id="article">
+			<script type="text/javascript">
+				document.getElementById('article').innerHTML = "<iframe src='bar_hour.html" +
+					"?start_day=" + start_day +
+					"&end_day=" + end_day +
+					"&station=" + station +
+					"' width='100%' height='100%' frameborder='0'> </iframe>";
+			</script>
+		</div>
+	</body>
+</html>

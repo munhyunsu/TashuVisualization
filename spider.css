@@ -1,0 +1,14 @@
+html, body {
+	height: 99%;
+	width: 99%;
+}
+#nav {
+	width: 70%;
+	height: 100%;
+	float: left;
+}
+#article {
+	width: 30%;
+	height: 100%;
+	float: right;
+}
