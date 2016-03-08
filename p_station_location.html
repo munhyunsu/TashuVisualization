@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tashu Map</title>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="article.css">
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYRZVsKZG-LKpiMfya-LRYtLo7hCa-nwo&sensor=true"></script>
+		<script>
+			var map;
+			var query;
+			var query2;
+			var markers = [];
+			var tov = 0; // time out variable
+			var io_type;
+			var limit_num;
+			var start_day, end_day, rent_return;
+			var rent_top, rent_bottom;
+
+			function initialize() {
+				var mapOptions = {
+					zoom: 14,
+					center: new google.maps.LatLng(36.366768, 127.344592)
+				};
+				map = new google.maps.Map(document.getElementById('article'),
+					mapOptions);
+
+				parseUrl();
+
+				//setQuery();
+				query = "SELECT station_number, name, latlng, io.count FROM station AS st, (SELECT rent_station, COUNT(*) AS count FROM innout WHERE rent_station != 0 AND return_station != 0 GROUP BY rent_station) AS io WHERE st.station_number = io.rent_station ORDER BY io.count DESC";
+				rent_bottom = 144;
+
+				downloadUrl("station_genxml.php?query="+query, function(data) {
+					var xml = data.responseXML;
+					var stations = xml.documentElement.getElementsByTagName("station");
+					for (var i = rent_top-1; i < stations.length; i++) {
+						var station_number = stations[i].getAttribute("station_number");
+						var name = stations[i].getAttribute("name");
+						var lat = stations[i].getAttribute("lat");
+						var lng = stations[i].getAttribute("lng");
+						
+						if( i < 48 ) {
+							createPlacemark(i+1, "[대여"+(i+1)+"위]" + station_number + ". " +name, lat, lng, (5000/(rent_bottom-rent_top)), "|FE7569");
+						} else if ( i < 96 ) { // 48 < i < 96
+							createPlacemark(i+1, "[대여"+(i+1)+"위]" + station_number + ". " +name, lat, lng, (5000/(rent_bottom-rent_top)), "|6975FE");
+						} else {
+							createPlacemark(i+1, "[대여"+(i+1)+"위]" + station_number + ". " +name, lat, lng, (5000/(rent_bottom-rent_top)), "|69FE75");
+						}
+					}
+				});
+			}
+
+			function createPlacemark(top_num, name, lat, lng, term, color) {
+				setTimeout(function() {
+					markers.push(new google.maps.Marker({
+						position: new google.maps.LatLng(lat, lng),
+						map: map,
+						title: name,
+						icon: new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+ top_num + color,
+							new google.maps.Size(21, 34),
+							new google.maps.Point(0, 0),
+							new google.maps.Point(10, 34)),
+						animation: google.maps.Animation.DROP,
+						opacity: 0.7
+					}));
+				}, tov * term);
+				tov++;
+			}
+			
+			function downloadUrl(url, callback) {
+				var request = window.ActiveXObject ?
+						new ActiveXObject('Microsoft.XMLHTTP') :
+						new XMLHttpRequest;
+						
+				request.onreadystatechange = function() {
+					if(request.readyState == 4) {
+						request.onreadystatechange = doNothing;
+						callback(request, request.status);
+					}
+				};
+				
+				request.open('GET', url, true);
+				request.send(null);
+			}
+			
+			function doNothing() {}
+			
+			google.maps.event.addDomListener(window, 'load', initialize);
+
+			function parseUrl() {
+				var parameters = location.search.substring(1).split("&");
+
+				if(parameters.length == 4) {			
+					var temp = parameters[0].split("=");
+					start_day = unescape(temp[1]);
+
+					temp = parameters[1].split("=");
+					end_day = unescape(temp[1]);
+
+					temp = parameters[2].split("=");
+					rent_top = unescape(temp[1]);
+
+					temp = parameters[3].split("=");
+					rent_bottom = unescape(temp[1]);
+				} else {
+					start_day = "2013/01/01 00:00:00";
+					end_day = "2014/01/01 05:59:59";
+					rent_top = 1;
+					rent_bottom = 10;
+				}
+			}
+
+			function setQuery() {
+				query = "SELECT station_number, name, latlng, io.count FROM station AS st, (SELECT rent_station, COUNT(*) AS count FROM innout WHERE rent_station != 0 AND return_station != 0 AND rent_date BETWEEN '" +
+				start_day +
+				"' AND '" +
+				end_day +
+				"' GROUP BY rent_station ORDER BY COUNT(*) DESC LIMIT " + rent_bottom +") AS io WHERE st.station_number = io.rent_station";
+			}
+		</script>
+	</head>
+	<body>
+		<div id="article"></div>
+	</body>
+</html>

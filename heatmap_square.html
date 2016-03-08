@@ -53,9 +53,14 @@
 					};
 				}, function (error, data) {
 
-					var colorScale = d3.scale.quantile()
-						.domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
+					//var colorScale = d3.scale.quantile()
+					//	.domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
+					//	.range(colors);
+					var colorScale = d3.scale.linear()
+						.domain(d3.range(0, d3.max(data, function (d) { return d.value; }), d3.max(data, function (d) { return d.value; })/buckets) )
 						.range(colors);
+					
+					//alert(colorScale.ticks());
 
 					var svg = d3.select("#chart").append("svg")
 						.attr("width", width + margin.left + margin.right)
@@ -100,8 +105,11 @@
 					
 					heatMap.append("title").text(function(d) { return d.value; });
 
+					//alert(colorScale.ticks());
+
 					var legend = svg.selectAll(".legend")
-						.data([0].concat(colorScale.quantiles()), function(d) { return d; })
+						//.data([0].concat(colorScale.quantiles()), function(d) { return d; })
+						.data(d3.range(0, d3.max(data, function (d) { return d.value; }), d3.max(data, function (d) { return d.value; })/buckets) )
 						.enter().append("g")
 						.attr("class", "legend");
 
