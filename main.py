@@ -2,3 +2,7 @@
 
 import flask
 
+
+@route('/')
+def index():
+    pass
