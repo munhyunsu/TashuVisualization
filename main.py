@@ -47,14 +47,6 @@ def initdb_command():
     init_db()
     print('Initialized the database.')
 
-@app.route('/')
-def show_entries():
-    db = get_db()
-    cur = db.execute('SELECT title, text FROM entries ORDER BY id DESC')
-    entries = cur.fetchall()
-    print(entries)
-    return render_template('show_entries.html', entries = entries)
-
 @app.route('/add', methods = ['POST'])
 def add_entry():
     if not session.get('logged_in'):
