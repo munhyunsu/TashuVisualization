@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS entries;
-CREATE TABLE entries (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE station (
+    id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
-    'text' text NOT NULL
+    location TEXT NOT NULL
 );
