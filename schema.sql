@@ -4,3 +4,9 @@ CREATE TABLE station (
     title TEXT NOT NULL,
     location TEXT NOT NULL
 );
+
+CREATE TABLE transaction (
+    timestamp INTEGER NOT NULL,
+    src INTEGER NOT NULL,
+    dst INTEGER NOT NULL
+);
