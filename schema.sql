@@ -3,7 +3,7 @@ CREATE TABLE station (
     id INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     lat TEXT NOT NULL,
-    lng TEXT NOT NULL,
+    lng TEXT NOT NULL
 );
 
 CREATE TABLE transaction (
