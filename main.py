@@ -46,3 +46,6 @@ def initdb_command():
     """Initializes the database."""
     init_db()
     print('Initialized the database.')
+
+def read_csv():
+    pass
